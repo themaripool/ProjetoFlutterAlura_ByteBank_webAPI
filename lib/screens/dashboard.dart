@@ -16,25 +16,46 @@ class Dashboard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Image.asset('images/bytebank_logo.png'),
           ),
-          Row(
-            children: [
-              _FeatureItem('Transferências', Icons.monetization_on),
-              _FeatureItem('Feed de Transações', Icons.description),
-              
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _FeatureItem(
+                  'Transferências',
+                  Icons.monetization_on,
+                  onClick: () {
+                    print("clicou em transferencias");
+                    _showContactsList(context);
+                  },
+                ),
+                _FeatureItem('Feed de Transações', Icons.description,
+                    onClick: () {
+                  print("clicou em transações");
+                }),
+                
+              ],
+            ),
           )
         ],
+      ),
+    );
+  }
+
+  void _showContactsList(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ContactsList(),
       ),
     );
   }
 }
 
 class _FeatureItem extends StatelessWidget {
-  
   final String name;
   final IconData icon;
-
-  _FeatureItem(this.name, this.icon);
+  final Function onClick; //calback dart
+//a calback eh um paremetro necessario de ser implementado
+  _FeatureItem(this.name, this.icon, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +65,8 @@ class _FeatureItem extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         child: InkWell(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ContactsList(),
-              ),
-            );
+            //navegacao específica para cada uma das funcionalidades
+            onClick();
           },
           child: Container(
             padding: EdgeInsets.all(8.0),
